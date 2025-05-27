@@ -6,6 +6,7 @@ const Resources = ({ query }) => {
   const [videos, setVideos] = useState([]);
   const [maxResults, setMaxResults] = useState(5);
   const [error, setError] = useState('');
+  const [sortByViews, setSortByViews] = useState(false);
 
   useEffect(() => {
     setError('');
@@ -24,15 +25,26 @@ const Resources = ({ query }) => {
       });
   }, [query, maxResults]);
 
+  const sortedVideos = sortByViews
+    ? [...videos].sort((a, b) => b.views - a.views)
+    : videos;
+
   return (
     <div className="resources">
       <h3 className="resources-title">YouTube Resources</h3>
+      <button
+        className="see-more-btn"
+        style={{ marginBottom: '0.5rem' }}
+        onClick={() => setSortByViews(v => !v)}
+      >
+        Sort by Views {sortByViews ? '▲' : '▼'}
+      </button>
       {error && (
         <div style={{ color: 'red', margin: '1rem 0' }}>
           {error}
         </div>
       )}
-      {!error && videos.map(video => (
+      {!error && sortedVideos.map(video => (
         <a
           key={video.id}
           href={`https://youtube.com/watch?v=${video.id}`}
