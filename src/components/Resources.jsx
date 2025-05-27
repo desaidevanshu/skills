@@ -5,28 +5,34 @@ import '../styles/Resources.css';
 const Resources = ({ query }) => {
   const [videos, setVideos] = useState([]);
   const [maxResults, setMaxResults] = useState(5);
-  const [sortByViews, setSortByViews] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    setError('');
     if (!query) return;
-    fetchYouTubeVideos(query, maxResults).then(setVideos);
+    fetchYouTubeVideos(query, maxResults)
+      .then(setVideos)
+      .catch(e => {
+        if (
+          e.message &&
+          e.message.toLowerCase().includes('quota')
+        ) {
+          setError('YouTube search limit reached. Please try again tomorrow.');
+        } else {
+          setError('Failed to fetch YouTube videos.');
+        }
+      });
   }, [query, maxResults]);
-
-  const sortedVideos = sortByViews
-    ? [...videos].sort((a, b) => b.views - a.views)
-    : videos;
 
   return (
     <div className="resources">
       <h3 className="resources-title">YouTube Resources</h3>
-      <button
-        className="see-more-btn"
-        style={{ marginBottom: '0.5rem' }}
-        onClick={() => setSortByViews(v => !v)}
-      >
-        Sort by Views {sortByViews ? '▲' : '▼'}
-      </button>
-      {sortedVideos.map(video => (
+      {error && (
+        <div style={{ color: 'red', margin: '1rem 0' }}>
+          {error}
+        </div>
+      )}
+      {!error && videos.map(video => (
         <a
           key={video.id}
           href={`https://youtube.com/watch?v=${video.id}`}
@@ -48,7 +54,7 @@ const Resources = ({ query }) => {
           </span>
         </a>
       ))}
-      {videos.length === maxResults && maxResults < 20 && (
+      {!error && videos.length === maxResults && maxResults < 20 && (
         <button
           className="see-more-btn"
           onClick={() => setMaxResults(maxResults + 5)}

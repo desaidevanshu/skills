@@ -2,12 +2,60 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skillitron</title>
+    <style>
+      #toTopBtn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      #toTopBtn.show {
+        display: flex;
+      }
+      .footer-devanshu {
+        text-align: center;
+        margin-top: 2rem;
+        color: #888;
+        font-size: 0.95rem;
+        user-select: none;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <button id="toTopBtn" title="Go to top">&#8679;</button>
+    <div class="footer-devanshu">
+      &copy; 2025 Skillitron &mdash; Developed by Devanshu Desai
+    </div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Show button when scrolled down
+      const toTopBtn = document.getElementById('toTopBtn');
+      window.onscroll = function() {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+          toTopBtn.classList.add('show');
+        } else {
+          toTopBtn.classList.remove('show');
+        }
+      };
+      toTopBtn.onclick = function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    </script>
   </body>
 </html>
