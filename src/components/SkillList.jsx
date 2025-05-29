@@ -1,6 +1,6 @@
 import React from 'react';
 import SkillCard from './SkillCard';
-import '../styles/SkillList.css';
+import '../index.css'; // Assuming you have a CSS file for styles
 
 const SkillList = ({ skills, onProgress, onDelete }) => (
   <div className="skills-grid">

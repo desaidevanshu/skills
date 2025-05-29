@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import Resources from './Resources';
-import '../styles/SkillCard.css';
+import '../index.css'; // Assuming you have a CSS file for styles
 
 const SkillCard = ({ skill, index, onProgress, onDelete }) => {
   const [watched, setWatched] = useState([]);

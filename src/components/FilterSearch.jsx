@@ -1,8 +1,8 @@
-import '../styles/FilterSearch.css';
+import '../index.css';
 
 const FilterSearch = ({ setSearchTerm }) => (
   <input
-    className="filter-search-input"
+    className="skill-search-bar"
     placeholder="Search skill..."
     onChange={e => setSearchTerm(e.target.value)}
   />

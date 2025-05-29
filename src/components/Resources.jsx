@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { fetchYouTubeVideos, fetchCourseraCourses } from '../utils/api';
 import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
 import { db, auth } from '../firebase.js';
-import '../styles/Resources.css';
+import '../index.css';
 
 function parseISO8601Duration(duration) {
   const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
@@ -55,11 +55,14 @@ const YouTubePlayer = ({ videoId, expanded, onExpand, onClose, onWatched }) => {
   }, [expanded, videoId, onWatched]);
 
   return expanded ? (
-    <div>
+    <div className='popup-content'>
+      <div className="popup-video-wrapper">
       <div id={containerId}></div>
+      </div>
       <button className="see-more-btn" style={{ marginTop: 8 }} onClick={onClose}>
         Close
       </button>
+    
     </div>
   ) : (
     <img
@@ -323,8 +326,7 @@ const Resources = ({ query, targetDate, onProgressUpdate }) => {
 
       <div style={{ marginTop: 16 }}>
         <strong>Progress:</strong> {progress}%<br />
-        <strong>Daily Suggestion:</strong> Watch at least {dailyHours} hrs/day to finish by your target date.<br />
-        <strong>Criteria:</strong> Watch at least 3 videos and 6 hours total to complete this skill.
+        
       </div>
 
       <h3 className="resources-title" style={{ marginTop: '2rem' }}>Coursera Courses:</h3>

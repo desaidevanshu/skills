@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/SkillForm.css'; 
+import '../index.css'; // Assuming you have a CSS file for styles
 
 const SkillForm = ({ onAdd }) => {
   const [name, setName] = useState('');
@@ -19,6 +19,7 @@ const SkillForm = ({ onAdd }) => {
     <form onSubmit={handleSubmit} className="skill-form">
       <input
         className="input"
+        type="text"
         value={name}
         onChange={e => setName(e.target.value)}
         placeholder="Skill name"
@@ -26,6 +27,7 @@ const SkillForm = ({ onAdd }) => {
       />
       <input
         className="input"
+        type="text"
         value={category}
         onChange={e => setCategory(e.target.value)}
         placeholder="Category"
@@ -36,7 +38,7 @@ const SkillForm = ({ onAdd }) => {
         value={targetDate}
         onChange={e => setTargetDate(e.target.value)}
       />
-      <button className="button" type="submit">Add Skill</button>
+      <button className="add-skill-btn" type="submit">Add Skill</button>
     </form>
   );
 };

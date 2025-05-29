@@ -113,3 +113,53 @@
     margin-bottom: 0.5em;
   }
 }
+/* Popup overlay for expanded video */
+.resources .popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Popup content styling */
+.resources .popup-content {
+  background: #fff;
+  padding: 1.5rem 1rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(60,72,88,0.2);
+  max-width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+/* Responsive video iframe or image */
+.resources .popup-content iframe,
+.resources .popup-content img {
+  width: 90vw;
+  max-width: 480px;
+  height: 54vw;
+  max-height: 270px;
+  border-radius: 10px;
+  object-fit: contain;
+  background: #000;
+}
+
+@media (max-width: 600px) {
+  .resources .popup-content {
+    padding: 0.5rem 0.2rem;
+    max-width: 99vw;
+  }
+  .resources .popup-content iframe,
+  .resources .popup-content img {
+    width: 98vw;
+    max-width: 98vw;
+    height: 56vw;
+    max-height: 56vw;
+  }
+}
