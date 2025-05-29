@@ -6,7 +6,7 @@ export const fetchYouTubeVideos = async (query, maxResults = 5) => {
     return cache[cacheKey];
   }
 
-  const API_KEY = 'AIzaSyBE3EX69k4-pBdQiBlqcgh6giK6lKcWes4';
+  const API_KEY = 'AIzaSyBqOBij-KWOWX3Jts5KxZ76nLpLWeKepyU';
   const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${maxResults}&key=${API_KEY}`;
   const searchRes = await fetch(searchUrl);
   const searchData = await searchRes.json();
