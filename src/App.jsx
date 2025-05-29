@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { db } from './AuthContext';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import SkillForm from './components/SkillForm';
 import SkillList from './components/SkillList';
 import FilterSearch from './components/FilterSearch';
+import logo from "/logo.png"; 
 import './index.css';
 
 const App = () => {
@@ -15,7 +16,6 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const hasLoaded = useRef(false);
 
-  // Load skills from Firestore when user logs in
   useEffect(() => {
     if (!user) {
       setSkills([]);
@@ -38,7 +38,6 @@ const App = () => {
     fetchSkills();
   }, [user, db]);
 
-  // Save skills to Firestore whenever they change, but only after initial load
   useEffect(() => {
     if (!user) return;
     if (!hasLoaded.current) return;
@@ -49,37 +48,54 @@ const App = () => {
     saveSkills();
   }, [skills, user, db]);
 
-  // Add a new skill
   const handleAddSkill = (skill) => {
     const exists = skills.some(
-    s => s.name.trim().toLowerCase() === skill.name.trim().toLowerCase()
-  );
-  if (exists) {
-    alert('Skill name must be unique!');
-    return;
-  }
-    setSkills([...skills, skill]);
+      s => s.name.trim().toLowerCase() === skill.name.trim().toLowerCase()
+    );
+    if (exists) {
+      alert('Skill name must be unique!');
+      return;
+    }
+    const newSkill = {
+      ...skill,
+      progress: skill.progress || 0,
+      testTaken: false
+    };
+    setSkills([...skills, newSkill]);
   };
 
-  // Delete a skill
   const handleDeleteSkill = (index) => {
     const updated = skills.filter((_, i) => i !== index);
     setSkills(updated);
   };
 
-  // Update progress
   const handleProgressChange = (index, value) => {
-    const updated = [...skills];
-    updated[index].progress = value;
+    setSkills(prevSkills => {
+      const updated = [...prevSkills];
+      updated[index].progress = value;
+      if (value >= 100 && updated[index].testTaken === undefined) {
+        updated[index].testTaken = false;
+      }
+      return updated;
+    });
+  };
+
+  const handleTestTaken = (skillName) => {
+    const updated = skills.map(skill =>
+      skill.name === skillName ? { ...skill, testTaken: true } : skill
+    );
     setSkills(updated);
   };
 
-  // Filtered skills for search
   const filteredSkills = skills.filter(skill =>
     skill.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Not logged in
+  const handleResourceProgress = useCallback(
+    (value) => handleProgressChange(0, value),
+    []
+  );
+
   if (!user) {
     return (
       <div className="app-container">
@@ -96,21 +112,39 @@ const App = () => {
     );
   }
 
-  // Logged in
   return (
     <div className="app-container">
-      <div className="user-bar">
-        <p className="welcome-text">Welcome, {user.displayName}</p>
-        <button onClick={logout} className="logout-btn">Logout</button>
+      {/* Navbar */}
+      <nav className="navbar">
+        <div className="navbar-left">
+          <span className="navbar-title">Skillitron</span>
+          <img src={logo} alt="Logo" className="navbar-logo" />
+        </div>
+        <div className="navbar-right">
+         
+          
+          <button onClick={logout} className="logout-btn">Logout</button>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="hero-section">
+        <h1 className="hero-welcome">
+          {user ? `Welcome, ${user.displayName || user.email}!` : 'Welcome!'}
+        </h1>
+        <p className="hero-subtitle">SkillSync - Personalized Learning Tracker</p>
+      </section>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <SkillForm onAdd={handleAddSkill} />
+        <FilterSearch setSearchTerm={setSearchTerm} />
+        <SkillList
+          skills={filteredSkills}
+          onDelete={handleDeleteSkill}
+          onProgress={handleProgressChange}
+        />
       </div>
-      <h1 className="app-title">SkillSync - Personalized Learning Tracker</h1>
-      <SkillForm onAdd={handleAddSkill} />
-      <FilterSearch setSearchTerm={setSearchTerm} />
-      <SkillList
-        skills={filteredSkills}
-        onDelete={handleDeleteSkill}
-        onProgress={handleProgressChange}
-      />
     </div>
   );
 };

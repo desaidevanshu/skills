@@ -1,9 +1,26 @@
-import React from 'react';
-import ProgressBar from './ProgressBar';
+import React, { useState, useCallback } from 'react';
 import Resources from './Resources';
-import '../styles/SkillCard.css'; 
+import '../styles/SkillCard.css';
 
 const SkillCard = ({ skill, index, onProgress, onDelete }) => {
+  const [watched, setWatched] = useState([]);
+
+  // Callback when a resource is watched
+  const handleResourceWatched = useCallback(
+    (videoId) => {
+      if (!watched.includes(videoId)) {
+        const newWatched = [...watched, videoId];
+        setWatched(newWatched);
+        // Automatically update progress
+        if (skill.resourcesCount && skill.resourcesCount > 0) {
+          const progress = Math.round((newWatched.length / skill.resourcesCount) * 100);
+          onProgress(index, progress);
+        }
+      }
+    },
+    [watched, onProgress, index, skill.resourcesCount]
+  );
+
   return (
     <div className="skill-card">
       <div className="skill-card-header">
@@ -14,18 +31,16 @@ const SkillCard = ({ skill, index, onProgress, onDelete }) => {
         </div>
         <button onClick={() => onDelete(index)} className="skill-card-delete">X</button>
       </div>
+      {/* ProgressBar removed */}
       <div className="skill-card-progress">
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={skill.progress}
-          onChange={(e) => onProgress(index, parseInt(e.target.value))}
-        />
-        <ProgressBar value={skill.progress} />
-        <p className="skill-card-progress-label">Progress: {skill.progress}%</p>
+      
+        {skill.progress === 100 && (
+          <span className="skill-completed-badge" style={{ color: 'green', fontWeight: 'bold' }}>
+            Skill Completed!
+          </span>
+        )}
       </div>
-      <Resources query={skill.name} />
+      <Resources query={skill.name} onResourceWatched={handleResourceWatched} />
     </div>
   );
 };

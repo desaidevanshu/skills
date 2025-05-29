@@ -95,3 +95,29 @@ export const getSkillsFromLocal = () => {
     return [];
   }
 };
+
+const markVideoAsWatched = async (videoId) => {
+  const user = auth.currentUser;
+  if (!user) {
+    console.warn('⚠️ No authenticated user. Skipping progress save.');
+    return;
+  }
+
+  const userId = user.uid;
+
+  if (!watched.includes(videoId)) {
+    const updatedWatched = [...watched, videoId];
+    setWatched(updatedWatched);
+
+    try {
+      await setDoc(doc(db, 'users', userId, 'progress', videoId), {
+        watched: true,
+        timestamp: new Date(),
+      });
+      console.log(`✅ Watched progress saved for video: ${videoId}`);
+    } catch (error) {
+      console.error('❌ Error saving watched progress:', error);
+    }
+  }
+};
+
