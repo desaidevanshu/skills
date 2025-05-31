@@ -99,7 +99,7 @@ const App = () => {
   if (!user) {
     return (
       <div className="app-container1">
-        <h1 className="app-title">Skillify - Personalized Learning Tracker</h1>
+        <h1 className="app-title">Skillitron - Personalized Learning Tracker</h1>
         <button onClick={login} className="google-btn">Sign in with Google</button>
       </div>
     );
@@ -117,7 +117,7 @@ const App = () => {
       {/* Navbar */}
       <nav className="navbar">
         <div className="navbar-left">
-          <span className="navbar-title">Skillify</span>
+          <span className="navbar-title">Skillitron</span>
           <img src={logo} alt="Logo" className="navbar-logo" />
         </div>
         <div className="navbar-right">
@@ -132,7 +132,7 @@ const App = () => {
         <h1 className="hero-welcome">
           {user ? `Welcome, ${user.displayName || user.email}!` : 'Welcome!'}
         </h1>
-        <p className="hero-subtitle">Skillify - Personalized Learning Tracker</p>
+        <p className="hero-subtitle">Skillitron - Personalized Learning Tracker</p>
       </section>
 
       {/* Main Content */}
