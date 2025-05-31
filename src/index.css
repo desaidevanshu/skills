@@ -622,3 +622,13 @@ body {
     padding: 0.9rem 0.8rem;
   }
 }
+
+.app-container1 {
+  min-height: calc(100vh - 80px); /* Adjust 80px to your navbar/footer height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem; /* Space below navbar */
+  margin-bottom: 2rem; /* Space above footer */
+}
